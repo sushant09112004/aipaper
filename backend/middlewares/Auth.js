@@ -16,7 +16,10 @@ export const userAuth = async (req, res, next) => {
         if (!req) {
             throw new Error('Request object is undefined');
         }
-        req.user = user;  
+        // Set req.user with id property for controllers
+        req.user = {
+            id: user._id.toString()
+        };
         req.userId = user._id;  
         
         next();

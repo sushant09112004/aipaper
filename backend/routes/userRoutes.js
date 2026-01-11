@@ -7,6 +7,7 @@ import {
   getUser,
   updateUserResults,
   fetchResults,
+  logoutUser,
 } from "../controllers/userController.js";
 import { userAuth } from "../middlewares/Auth.js";
 import express from "express";
@@ -16,6 +17,7 @@ const router = express.Router();
 router.post("/register", registerUser);
 router.post("/send-otp", sendLoginOTP);
 router.post("/verify-otp", verifyLoginOTP);
+router.post("/logout", logoutUser);
 
 // Logged-in user info
 router.get("/me", userAuth, getUser);

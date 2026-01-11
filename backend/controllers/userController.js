@@ -7,12 +7,28 @@ import nodemailer from "nodemailer";
 dotenv.config();
 
 
+// Create nodemailer transporter with Gmail SMTP
 const transporter = nodemailer.createTransport({
   service: 'gmail',
+  host: 'smtp.gmail.com',
+  port: 587,
+  secure: false, // true for 465, false for other ports
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASSWORD,
   },
+  tls: {
+    rejectUnauthorized: false
+  }
+});
+
+// Verify transporter configuration
+transporter.verify(function (error, success) {
+  if (error) {
+    console.error('❌ Email transporter configuration error:', error);
+  } else {
+    console.log('✅ Email transporter is ready to send emails');
+  }
 });
 
 const generateOTP = () => {
@@ -34,7 +50,13 @@ export const registerUser = async (req, res) => {
       !email ||
       !password
     ) {
-      return res.json({ success: false, message: "Please fill in all fields" });
+      return res.status(400).json({ success: false, message: "Please fill in all fields" });
+    }
+
+    // Check if JWT_SECRET is configured
+    if (!process.env.JWT_SECRET) {
+      console.error("JWT_SECRET is not configured in environment variables");
+      return res.status(500).json({ success: false, message: "Server configuration error" });
     }
 
     const salt = await bcrypt.genSalt(10);
@@ -53,15 +75,26 @@ export const registerUser = async (req, res) => {
 
     res.cookie("token", token, {
       httpOnly: true,
-      secure: true,
-      sameSite: "None",
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
       maxAge: 28 * 24 * 60 * 60 * 1000,
     });
 
-    res.json({ success: true, user: { name: user.firstname }, token });
+    res.status(201).json({ success: true, user: { name: user.firstname }, token });
   } catch (error) {
-    console.log(error);
-    res.json({ success: false, message: error.message });
+    console.error("Registration error:", error);
+    
+    // Handle duplicate email error
+    if (error.code === 11000 || error.message.includes("duplicate")) {
+      return res.status(400).json({ success: false, message: "Email already registered" });
+    }
+    
+    // Handle validation errors
+    if (error.name === "ValidationError") {
+      return res.status(400).json({ success: false, message: error.message });
+    }
+    
+    res.status(500).json({ success: false, message: error.message || "Registration failed" });
   }
 };
 
@@ -84,13 +117,39 @@ export const sendLoginOTP = async (req, res) => {
 
     // Send email OTP
     try {
-      await transporter.sendMail({
-        from: process.env.EMAIL_USER,
+      // Check if email credentials are configured
+      if (!process.env.EMAIL_USER || !process.env.EMAIL_PASSWORD) {
+        console.error('Email credentials not configured');
+        return res.status(500).json({ 
+          success: false, 
+          message: 'Email service not configured. Please contact administrator.' 
+        });
+      }
+
+      const mailOptions = {
+        from: `"AuthenTech" <${process.env.EMAIL_USER}>`,
         to: user.email,
-        subject: 'Your Login OTP',
-        text: `Your OTP code is ${otpCode}`,
-        html: `<p>Your OTP code is <strong>${otpCode}</strong></p>`,
-      });
+        subject: 'Your Login OTP - AuthenTech',
+        text: `Your OTP code is ${otpCode}. This code will expire in 5 minutes.`,
+        html: `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+            <h2 style="color: #333;">Your Login OTP</h2>
+            <p>Hello ${user.firstname || 'User'},</p>
+            <p>Your OTP code for login is:</p>
+            <div style="background-color: #f4f4f4; padding: 20px; text-align: center; margin: 20px 0; border-radius: 8px;">
+              <h1 style="color: #007bff; font-size: 32px; margin: 0; letter-spacing: 5px;">${otpCode}</h1>
+            </div>
+            <p style="color: #666; font-size: 14px;">This code will expire in 5 minutes.</p>
+            <p style="color: #666; font-size: 14px;">If you didn't request this code, please ignore this email.</p>
+            <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
+            <p style="color: #999; font-size: 12px;">This is an automated message from AuthenTech - Team Firewall Breakers</p>
+          </div>
+        `,
+      };
+
+      const info = await transporter.sendMail(mailOptions);
+      console.log('✅ OTP email sent successfully:', info.messageId);
+      console.log('📧 Email sent to:', user.email);
 
       // Update user with OTP details
       user.otp = {
@@ -102,13 +161,33 @@ export const sendLoginOTP = async (req, res) => {
 
       res.json({
         success: true,
-        message: "OTP sent successfully",
+        message: "OTP sent successfully to your email",
         otpSentTo: ['email']
       });
 
     } catch (emailError) {
-      console.error('Error sending email OTP:', emailError);
-      res.status(500).json({ success: false, message: 'Failed to send OTP email' });
+      console.error('❌ Error sending email OTP:', emailError);
+      console.error('Error details:', {
+        code: emailError.code,
+        command: emailError.command,
+        response: emailError.response
+      });
+      
+      // Provide more helpful error messages
+      let errorMessage = 'Failed to send OTP email';
+      if (emailError.code === 'EAUTH') {
+        errorMessage = 'Email authentication failed. Please check email credentials in .env file.';
+      } else if (emailError.code === 'ECONNECTION') {
+        errorMessage = 'Could not connect to email server. Please check your internet connection.';
+      } else if (emailError.response) {
+        errorMessage = `Email server error: ${emailError.response}`;
+      }
+      
+      res.status(500).json({ 
+        success: false, 
+        message: errorMessage,
+        error: process.env.NODE_ENV === 'development' ? emailError.message : undefined
+      });
     }
 
   } catch (error) {
@@ -158,8 +237,8 @@ export const verifyLoginOTP = async (req, res) => {
     // Set cookie
     res.cookie("token", token, {
       httpOnly: true,
-      secure: true,
-      sameSite: "None",
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
       maxAge: 28 * 24 * 60 * 60 * 1000,
     });
 

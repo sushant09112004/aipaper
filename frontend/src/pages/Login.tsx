@@ -41,8 +41,8 @@ export default function Login() {
   const { toast } = useToast();
   const navigate = useNavigate();
 
-  const API_BASE_URL = "https://hackodhisha-teamfb-backend.onrender.com";
-
+  // const API_BASE_URL = "https://hackodhisha-teamfb-backend.onrender.com";
+  const API_BASE_URL = "http://localhost:5000";
   const calculatePasswordStrength = (pass: string) => {
     let strength = 0;
     if (pass.length >= 8) strength += 25;

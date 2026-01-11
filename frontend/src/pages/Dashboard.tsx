@@ -58,7 +58,7 @@ export default function Dashboard() {
   const [isLoadingVerifications, setIsLoadingVerifications] = useState(false);
   const [showAllHistoryModal, setShowAllHistoryModal] = useState(false);
 
-  const API_BASE_URL = "https://hackodhisha-teamfb-backend.onrender.com";
+  const API_BASE_URL = "http://localhost:5000";
 
   // Static stats data
   const stats = [
@@ -188,7 +188,7 @@ export default function Dashboard() {
       const formData = new FormData();
       formData.append("file", uploadedDoc);
       const response = await fetch(
-        "https://hackodisha-ocr-api.onrender.com/extract/",
+        "http://localhost:8000/extract/",
         {
           method: "POST",
           body: formData,
@@ -209,7 +209,7 @@ export default function Dashboard() {
     formData.append("file", uploadedDoc);
     try {
       const response = await fetch(
-        "https://hackodisha-forge-detection-api-1.onrender.com/predict",
+        "http://localhost:8001/predict",
         {
           method: "POST",
           body: formData,

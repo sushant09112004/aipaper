@@ -194,7 +194,7 @@ export default function Verify() {
       const formData = new FormData();
       formData.append("file", file);
       const response = await fetch(
-        "https://hackodisha-ocr-api.onrender.com/extract/",
+        "http://localhost:8000/extract/",
         {
           method: "POST",
           body: formData,
@@ -219,7 +219,7 @@ export default function Verify() {
       if (ocrResult.Name && ocrResult.Institution) {
         const token = localStorage.getItem("authToken");
         fetch(
-          "https://hackodhisha-teamfb-backend.onrender.com/api/users/results",
+          "http://localhost:5000/api/users/results",
           {
             method: "POST",
             headers: {
@@ -259,7 +259,7 @@ export default function Verify() {
       const formData = new FormData();
       formData.append("file", file);
       const response = await fetch(
-        "https://hackodisha-forge-detection-api-1.onrender.com/predict",
+        "http://localhost:8001/predict",
         {
           method: "POST",
           body: formData,

@@ -29,8 +29,8 @@ genai.configure(api_key=GEMINI_API_KEY)
 
 # ---------- FastAPI App ----------
 app = FastAPI(
-    title="Gemini OCR API",
-    description="Extract certificate info from images",
+    title="Forge Detection API",
+    description="Detect forged/tampered certificates",
     version="1.0"
 )
 
@@ -98,11 +98,71 @@ Only return JSON.
     return data
 
 
-# ---------- API Endpoint ----------
-@app.post("/extract/")
-async def extract_certificate(file: UploadFile = File(...)):
+# ---------- Forge Detection Function ----------
+def detect_forgery(image_bytes: bytes):
+    """
+    Detect if a certificate is forged using Gemini AI.
+    Returns bounding boxes and confidence scores for suspicious regions.
+    """
+    image_data = base64.b64encode(image_bytes).decode("utf-8")
+    
+    prompt = """
+    You are an expert document forensics analyst. Analyze this certificate image for signs of forgery or tampering.
+    
+    Look for:
+    - Inconsistent fonts or text alignment
+    - Suspicious seals or signatures
+    - Altered dates or numbers
+    - Mismatched backgrounds or textures
+    - Signs of digital manipulation
+    
+    Return a JSON object with a "detections" array. Each detection should have:
+    - "bbox": [x, y, width, height] - bounding box coordinates (normalized 0-1)
+    - "class_name": "fake" or "true" - whether this region is suspicious
+    - "confidence": 0.0 to 1.0 - confidence score
+    
+    If no suspicious regions found, return empty detections array.
+    Return ONLY valid JSON, no other text.
+    """
+    
+    model = genai.GenerativeModel("gemini-2.5-flash")
+    response = model.generate_content(
+        contents=[
+            {"role": "user", "parts": [prompt, {"mime_type": "image/png", "data": image_data}]}
+        ]
+    )
+    
+    try:
+        data = json.loads(response.text.strip())
+    except json.JSONDecodeError:
+        match = re.search(r"\{.*\}", response.text, re.DOTALL)
+        if match:
+            data = json.loads(match.group())
+        else:
+            data = {"detections": []}
+    
+    # Ensure detections array exists
+    if "detections" not in data:
+        data["detections"] = []
+    
+    return data
+
+
+# ---------- API Endpoints ----------
+@app.post("/predict")
+async def predict_forgery(file: UploadFile = File(...)):
+    """
+    Predict if certificate is forged.
+    Returns detections with bounding boxes and confidence scores.
+    """
     if not file.content_type.startswith("image/"):
         raise HTTPException(status_code=400, detail="File must be an image")
+    
     image_bytes = await file.read()
-    extracted_data = extract_with_gemini(image_bytes)
-    return JSONResponse(content=extracted_data)
+    result = detect_forgery(image_bytes)
+    
+    # Ensure response matches expected format
+    if "detections" not in result:
+        result["detections"] = []
+    
+    return JSONResponse(content=result)
