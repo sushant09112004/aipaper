@@ -22,10 +22,16 @@ const transporter = nodemailer.createTransport({
   }
 });
 
-// Verify transporter configuration
+// Verify transporter configuration (non-blocking)
 transporter.verify(function (error, success) {
   if (error) {
-    console.error('❌ Email transporter configuration error:', error);
+    console.error('⚠️  Email transporter configuration error:', error.message);
+    if (error.code === 'ENOTFOUND' || error.code === 'EDNS') {
+      console.error('💡 DNS/Network issue - Check your internet connection');
+    } else if (error.code === 'EAUTH') {
+      console.error('💡 Authentication failed - Check EMAIL_USER and EMAIL_PASSWORD in .env');
+    }
+    console.log('⚠️  Email features will not work until this is resolved');
   } else {
     console.log('✅ Email transporter is ready to send emails');
   }

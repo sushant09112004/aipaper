@@ -72,6 +72,10 @@ export default function Login() {
 
       const data = await response.json();
 
+      if (!response.ok) {
+        throw new Error(data.message || `Server error: ${response.status}`);
+      }
+
       if (data.success) {
         setOtpSent(true);
         toast({
@@ -82,6 +86,7 @@ export default function Login() {
         throw new Error(data.message || "Failed to send OTP");
       }
     } catch (error: any) {
+      console.error("Send OTP error:", error);
       toast({
         variant: "destructive",
         title: "Error",
@@ -107,6 +112,10 @@ export default function Login() {
 
       const data = await response.json();
 
+      if (!response.ok) {
+        throw new Error(data.message || `Server error: ${response.status}`);
+      }
+
       if (data.success) {
         toast({
           title: "Login Successful",
@@ -124,11 +133,14 @@ export default function Login() {
         }
 
         // Navigate to dashboard
-        navigate("/dashboard");
+        setTimeout(() => {
+          navigate("/dashboard");
+        }, 500);
       } else {
         throw new Error(data.message || "Invalid OTP");
       }
     } catch (error: any) {
+      console.error("Verify OTP error:", error);
       toast({
         variant: "destructive",
         title: "Error",
@@ -159,14 +171,35 @@ export default function Login() {
 
       const data = await response.json();
 
+      if (!response.ok) {
+        throw new Error(data.message || `Server error: ${response.status}`);
+      }
+
       if (data.success) {
         toast({
           title: "Registration Successful",
-          description: "Account created successfully! You can now login.",
+          description: "Account created successfully! Logging you in...",
         });
 
-        // Switch to login tab
-        setActiveTab("login");
+        // Store token if provided (auto-login after registration)
+        if (data.token) {
+          localStorage.setItem("authToken", data.token);
+        }
+
+        // Store user info if provided
+        if (data.user) {
+          localStorage.setItem("userInfo", JSON.stringify(data.user));
+        }
+
+        // Auto-login: Navigate to dashboard if token is available
+        if (data.token) {
+          setTimeout(() => {
+            navigate("/dashboard");
+          }, 1000);
+        } else {
+          // If no token, switch to login tab
+          setActiveTab("login");
+        }
       } else {
         throw new Error(data.message || "Registration failed");
       }

@@ -59,8 +59,19 @@ const server = app.listen(PORT, 'localhost', () => {
   console.log(`✅ Server is running on http://localhost:${PORT}`);
   console.log(`✅ Server is also accessible on http://127.0.0.1:${PORT}`);
   console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`MongoDB URI: ${process.env.MONGO_URI ? 'Configured' : 'NOT CONFIGURED'}`);
-  console.log(`JWT Secret: ${process.env.JWT_SECRET ? 'Configured' : 'NOT CONFIGURED'}`);
+  
+  // Check and display configuration status
+  const mongoUri = process.env.MONGO_URI;
+  const jwtSecret = process.env.JWT_SECRET;
+  const emailUser = process.env.EMAIL_USER;
+  const emailPass = process.env.EMAIL_PASSWORD;
+  
+  console.log(`\n📋 Configuration Status:`);
+  console.log(`   MongoDB URI: ${mongoUri ? `✅ Configured (${mongoUri.substring(0, 20)}...)` : '❌ NOT CONFIGURED'}`);
+  console.log(`   JWT Secret: ${jwtSecret ? '✅ Configured' : '❌ NOT CONFIGURED'}`);
+  console.log(`   Email User: ${emailUser ? '✅ Configured' : '❌ NOT CONFIGURED'}`);
+  console.log(`   Email Password: ${emailPass ? '✅ Configured' : '❌ NOT CONFIGURED'}`);
+  
   console.log(`\n📡 Test endpoints:`);
   console.log(`   - http://localhost:${PORT}/`);
   console.log(`   - http://localhost:${PORT}/health`);
