@@ -106,3 +106,8 @@ async def extract_certificate(file: UploadFile = File(...)):
     image_bytes = await file.read()
     extracted_data = extract_with_gemini(image_bytes)
     return JSONResponse(content=extracted_data)
+
+#Temoporary debug part for api
+load_dotenv()
+print("GEMINI_API_KEY:", os.getenv("GEMINI_API_KEY"))
+

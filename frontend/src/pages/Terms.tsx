@@ -21,9 +21,9 @@ export default function Terms() {
               Terms of Service
             </h1>
             <p className="text-xl text-muted-foreground">
-              Rules and guidelines for using the AuthenTech platform
+              Rules and guidelines for using the DocuShield platform
             </p>
-            <Badge variant="secondary">Effective from: December 1, 2024</Badge>
+            <Badge variant="secondary">Effective from: January 1, 2026</Badge>
           </div>
 
           {/* Content */}
@@ -37,8 +37,8 @@ export default function Terms() {
               </CardHeader>
               <CardContent className="prose prose-slate max-w-none">
                 <p>
-                  By accessing and using the AuthenTech document verification
-                  platform operated by Team Firewall Breakers, you agree to be
+                  By accessing and using the DocuShield document verification
+                  platform operated by Team VeriTrust, you agree to be
                   bound by these Terms of Service and all applicable laws and
                   regulations.
                 </p>
@@ -150,7 +150,7 @@ export default function Terms() {
 
                 <h4>Liability Limitation:</h4>
                 <p>
-                  Team Firewall Breakers shall not be liable for any indirect,
+                  Team VeriTrust shall not be liable for any indirect,
                   incidental, special, consequential, or punitive damages
                   resulting from your use of this platform.
                 </p>
@@ -203,17 +203,17 @@ export default function Terms() {
                 </p>
                 <div className="space-y-2 text-sm">
                   <p>
-                    <strong>Email:</strong> legal@authentech.com
+                    <strong>Email:</strong> legal@docushield.com
                   </p>
                   <p>
                     <strong>Phone:</strong> +91-651-XXX-XXXX
                   </p>
                   <p>
-                    <strong>Address:</strong> Team Firewall Breakers
+                    <strong>Address:</strong> Team VeriTrust
                     <br />
-                    Technology Innovation Center
+                    Parvati Paytha
                     <br />
-                    Bhubaneswar - 751024, Odisha
+                    Pune - 411009, Maharashtra
                   </p>
                 </div>
               </CardContent>

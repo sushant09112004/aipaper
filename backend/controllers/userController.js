@@ -133,9 +133,9 @@ export const sendLoginOTP = async (req, res) => {
       }
 
       const mailOptions = {
-        from: `"AuthenTech" <${process.env.EMAIL_USER}>`,
+        from: `"DocuShield" <${process.env.EMAIL_USER}>`,
         to: user.email,
-        subject: 'Your Login OTP - AuthenTech',
+        subject: 'Your Login OTP - DocuShield',
         text: `Your OTP code is ${otpCode}. This code will expire in 5 minutes.`,
         html: `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
@@ -148,7 +148,7 @@ export const sendLoginOTP = async (req, res) => {
             <p style="color: #666; font-size: 14px;">This code will expire in 5 minutes.</p>
             <p style="color: #666; font-size: 14px;">If you didn't request this code, please ignore this email.</p>
             <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
-            <p style="color: #999; font-size: 12px;">This is an automated message from AuthenTech - Team Firewall Breakers</p>
+            <p style="color: #999; font-size: 12px;">This is an automated message from DocuShield - Team VeriTrust</p>
           </div>
         `,
       };

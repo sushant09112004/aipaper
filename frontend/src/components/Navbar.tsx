@@ -119,7 +119,7 @@ export function Navbar() {
           </div>
           <div className="hidden sm:block">
             <h1 className="font-display text-xl font-bold text-foreground">
-              AuthenTech
+              DocuShield
             </h1>
           </div>
         </Link>

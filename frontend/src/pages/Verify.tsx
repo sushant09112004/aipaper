@@ -43,10 +43,25 @@ interface Detection {
   confidence: number;
 }
 
+/* CHANGE1A 
 interface VerificationApiResponse {
   detections: Detection[];
 }
+END CHANGE 1A AGAIN ADD THIS CHANGE TO MAKE AS IT IS*/
 
+//CHANGE 1B
+interface ForgedField {
+  field: string;
+  confidence: number;
+}
+
+interface VerificationApiResponse {
+  detections: Detection[];
+  forged_fields?: ForgedField[];
+}
+//CHANGE 1B END
+
+/* CHANGE2A 
 interface VerificationResult {
   status: "valid" | "review" | "invalid";
   detections: Detection[];
@@ -57,6 +72,21 @@ interface VerificationResult {
   };
   visualizationUrl?: string;
 }
+END CHANGE 2A AGAIN ADD THIS CHANGE TO MAKE AS IT IS*/  
+
+//CHANGE 2B
+ interface VerificationResult {
+  status: "valid" | "review" | "invalid";
+  detections: Detection[];
+  forgedFields?: ForgedField[];
+  summary: {
+    totalDetections: number;
+    fakeDetections: number;
+    trueDetections: number;
+  };
+  visualizationUrl?: string;
+}
+//END CHANGE 2B
 
 const PredictBBoxWidget = () => {
   const [image, setImage] = useState<File | null>(null);
@@ -272,7 +302,12 @@ export default function Verify() {
       console.log("Verification API result:", apiResult);
 
       // Process the API result
-      const { detections } = apiResult;
+      //CHANGE 3A
+      //const { detections } = apiResult;
+      // END CHANGE 3A REMOVE THIS TO MAKE AS IT IS
+      //CHANGE 3B
+      const { detections, forged_fields } = apiResult;
+      //END CHANGE 3B
       const fakeDetections = detections.filter((d) => d.class_name === "fake");
       const trueDetections = detections.filter((d) => d.class_name === "true");
 
@@ -290,7 +325,8 @@ export default function Verify() {
 
       // Create visualization with bounding boxes
       const visualizationUrl = await createVisualization(file, detections);
-
+      
+      /*CHANGE 4A
       const result: VerificationResult = {
         status,
         detections,
@@ -300,8 +336,20 @@ export default function Verify() {
           trueDetections: trueDetections.length,
         },
         visualizationUrl,
+      };END CHANGE 4A REMOVE THIS TO MAKE AS IT IS*/
+      //CHANGE 4B
+      const result: VerificationResult = {
+        status,
+        detections,
+        forgedFields: forged_fields,
+        summary: {
+          totalDetections: detections.length,
+          fakeDetections: fakeDetections.length,
+          trueDetections: trueDetections.length,
+        },
+        visualizationUrl,
       };
-
+      //END CHANGE 4B
       setVerificationResult(result);
       setVerificationStep(3);
 
@@ -433,6 +481,7 @@ export default function Verify() {
       timestamp: new Date().toLocaleString(),
       verificationStatus: verificationResult.status,
       summary: verificationResult.summary,
+      forgedFields: verificationResult.forgedFields,
       detections: verificationResult.detections.map((detection, index) => ({
         regionId: index + 1,
         status: detection.class_name === "fake" ? "Suspicious" : "Authentic",
@@ -730,6 +779,30 @@ export default function Verify() {
               .join("")}
         </div>
     </div>
+
+        ${
+      reportData.forgedFields && reportData.forgedFields.length > 0
+        ? `
+    <div class="section">
+        <h3>🚨 Forged Fields Detected</h3>
+        <div class="detection-list">
+            ${reportData.forgedFields
+              .map(
+                (field) => `
+                <div class="detection-item detection-suspicious">
+                    <span>⚠️ ${field.field}</span>
+                    <span style="font-weight: bold;">
+                        ${Math.round(field.confidence * 100)}%
+                    </span>
+                </div>
+            `
+              )
+              .join("")}
+        </div>
+    </div>
+    `
+        : ""
+    }
 
     ${
       reportData.ocrData && !reportData.ocrData.error
@@ -1231,7 +1304,7 @@ export default function Verify() {
                         </div>
                       </div>
                     )}
-
+                    
                     {/* Detection Summary */}
                     <div className="space-y-2">
                       <h4 className="font-medium">Detection Summary</h4>
@@ -1254,6 +1327,33 @@ export default function Verify() {
                         </div>
                       </div>
                     </div>
+
+                    {/* Forged Fields */}
+                    {verificationResult.forgedFields &&
+                      verificationResult.forgedFields.length > 0 && (
+                        <div className="space-y-2">
+                          <h4 className="font-medium text-red-600">
+                            Forged Fields Detected
+                          </h4>
+                          <div className="space-y-2">
+                            {verificationResult.forgedFields.map(
+                              (field, index) => (
+                                <div
+                                  key={index}
+                                  className="flex justify-between items-center p-2 bg-red-50 border border-red-200 rounded text-sm"
+                                >
+                                  <span className="text-red-700 font-medium">
+                                    {field.field}
+                                  </span>
+                                  <span className="text-red-600 font-bold">
+                                    {Math.round(field.confidence * 100)}%
+                                  </span>
+                                </div>
+                              )
+                            )}
+                          </div>
+                        </div>
+                      )}
 
                     {/* Detailed Detection List */}
                     <div className="space-y-2">

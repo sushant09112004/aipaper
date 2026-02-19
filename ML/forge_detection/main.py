@@ -1,3 +1,24 @@
+#CHANGE1
+# Approximate field regions (normalized 0-1 scale)
+FIELDS_COORDINATES = {
+    "Name": [0.10, 0.15, 0.80, 0.22],
+    "Roll Number": [0.10, 0.23, 0.80, 0.30],
+    "CGPA": [0.60, 0.75, 0.90, 0.82],
+    "SGPA": [0.60, 0.83, 0.90, 0.90],
+    "Certificate Id": [0.70, 0.10, 0.95, 0.15],
+}
+#CHANGE1 END 
+#CHANGE2
+def check_overlap(box1, box2):
+    x1, y1, w1, h1 = box1
+    x2, y2 = x1 + w1, y1 + h1
+
+    a1, b1, a2, b2 = box2  # field coords already [x1,y1,x2,y2]
+
+    return (x1 < a2 and x2 > a1 and y1 < b2 and y2 > b1)
+
+#CHANGE2 END
+
 # filename: app.py
 import base64
 import json
@@ -142,11 +163,35 @@ def detect_forgery(image_bytes: bytes):
             data = {"detections": []}
     
     # Ensure detections array exists
+    #CHANGE3A** TO MAKE AS BEFORE REMOVE THIS FROM HERE TILL RET DATA...if "detections" not in data:
+        #data["detections"] = []
+    
+    #return data END CHANGE3A**
+
+    #CHANGE 3B
+    # Ensure detections array exists
     if "detections" not in data:
         data["detections"] = []
-    
-    return data
 
+    # -------- NEW PART: Detect Forged Fields --------
+    forged_fields = []
+
+    for detection in data["detections"]:
+        if detection.get("class_name") == "fake":
+            bbox = detection.get("bbox")
+            confidence = detection.get("confidence", 0)
+
+            for field_name, field_coords in FIELDS_COORDINATES.items():
+                if check_overlap(bbox, field_coords):
+                    forged_fields.append({
+                        "field": field_name,
+                        "confidence": confidence
+                    })
+
+    data["forged_fields"] = forged_fields
+
+    return data
+    #END CHANGE 3B 
 
 # ---------- API Endpoints ----------
 @app.post("/predict")
@@ -166,3 +211,4 @@ async def predict_forgery(file: UploadFile = File(...)):
         result["detections"] = []
     
     return JSONResponse(content=result)
+

@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Shield, FileSearch, CheckCircle, Zap, ArrowRight } from "lucide-react";
-import heroImage from "@/assets/hero-verification.jpg";
+import heroImage from "@/assets/DocVer2.jpeg";
 
 export function Hero() {
   return (
@@ -50,7 +50,7 @@ export function Hero() {
               className="bg-white/20 text-white border-white/30 backdrop-blur-sm px-4 py-2 text-sm"
             >
               <Shield className="h-4 w-4 mr-2" />
-              Developed By Team Firewall Breakers
+              Developed By Team VeriTrust
             </Badge>
           </div>
 
@@ -60,13 +60,13 @@ export function Hero() {
             style={{ animationDelay: "0.2s" }}
           >
             <h1 className="text-5xl md:text-7xl font-display font-bold leading-tight">
-              Authenticate Academic
+              Authenticate Document
               <span className="block text-accent-light">Credentials</span>
               <span className="block">Instantly</span>
             </h1>
             <p className="text-xl md:text-2xl text-white/90 leading-relaxed max-w-3xl mx-auto">
               OCR + registry verification + cryptographic proofs in a single
-              workflow. Protect academic integrity with government-grade
+              workflow. Protect document integrity with government-grade
               security.
             </p>
           </div>

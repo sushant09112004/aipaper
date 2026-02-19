@@ -22,6 +22,7 @@ This folder contains two ML services:
    ```bash
    venv\Scripts\activate
    ```
+   
 
 3. Install dependencies:
    ```bash

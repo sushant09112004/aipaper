@@ -220,7 +220,7 @@ export default function Help() {
                     <div>
                       <p className="font-medium">Email Support</p>
                       <p className="text-sm text-muted-foreground">
-                        support@authentech.com
+                        support@docushield.com
                       </p>
                       <Badge variant="outline" className="mt-1 text-xs">
                         Response within 4 hours
@@ -262,13 +262,13 @@ export default function Help() {
                 <div className="border-t pt-6">
                   <h4 className="font-medium mb-4">Office Address</h4>
                   <p className="text-sm text-muted-foreground">
-                    Team Firewall Breakers
+                    Team VeriTrust
                     <br />
-                    Netaji subhash Engineering College
+                    Pune Vidyarthi Grihas College Of Engineering & Technology
                     <br />
-                    Kolkata
+                    Pune
                     <br />
-                    West Bengal, India
+                    Maharashtra, India
                   </p>
                 </div>
 
