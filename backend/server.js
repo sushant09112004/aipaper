@@ -61,7 +61,7 @@ const server = app.listen(PORT, 'localhost', () => {
   console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
   
   // Check and display configuration status
-  const mongoUri = process.env.MONGO_URI;
+  const mongoUri = "mongodb+srv://jadhavsushant379_db_user:EjRiiekC4N1iZHg5@cluster0.f4zpb4k.mongodb.net/";
   const jwtSecret = process.env.JWT_SECRET;
   const emailUser = process.env.EMAIL_USER;
   const emailPass = process.env.EMAIL_PASSWORD;
