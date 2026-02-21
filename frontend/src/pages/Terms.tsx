@@ -21,7 +21,7 @@ export default function Terms() {
               Terms of Service
             </h1>
             <p className="text-xl text-muted-foreground">
-              Rules and guidelines for using the AuthenTech platform
+              Rules and guidelines for using the DocuShield platform
             </p>
             <Badge variant="secondary">Effective from: December 1, 2024</Badge>
           </div>
@@ -37,7 +37,7 @@ export default function Terms() {
               </CardHeader>
               <CardContent className="prose prose-slate max-w-none">
                 <p>
-                  By accessing and using the AuthenTech document verification
+                  By accessing and using the DocuShield document verification
                   platform operated by Team Firewall Breakers, you agree to be
                   bound by these Terms of Service and all applicable laws and
                   regulations.
@@ -203,7 +203,7 @@ export default function Terms() {
                 </p>
                 <div className="space-y-2 text-sm">
                   <p>
-                    <strong>Email:</strong> legal@authentech.com
+                    <strong>Email:</strong> legal@DocuShield.com
                   </p>
                   <p>
                     <strong>Phone:</strong> +91-651-XXX-XXXX

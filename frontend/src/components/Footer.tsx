@@ -46,7 +46,7 @@ export function Footer() {
                 <Shield className="h-6 w-6 text-white" />
               </div>
               <div>
-                <h3 className="font-display text-xl font-bold">AuthenTech</h3>
+                <h3 className="font-display text-xl font-bold">DocuShield</h3>
                 <p className="text-sm text-white/70">Team Firewall Breakers</p>
               </div>
             </div>
@@ -115,7 +115,7 @@ export function Footer() {
               <div className="flex items-center space-x-2">
                 <Mail className="h-4 w-4 text-white/60" />
                 <span className="text-sm text-white/80">
-                  support@authentech.com
+                  support@DocuShield.com
                 </span>
               </div>
             </div>

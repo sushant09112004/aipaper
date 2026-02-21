@@ -238,7 +238,7 @@ export default function Login() {
                 <Shield className="h-7 w-7" />
               </div>
               <div>
-                <h1 className="font-display text-2xl font-bold">AuthenTech</h1>
+                <h1 className="font-display text-2xl font-bold">DocuShield</h1>
                 <p className="text-white/80">Team Firewall Breakers</p>
               </div>
             </div>

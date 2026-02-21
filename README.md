@@ -1,15 +1,15 @@
-# 🔐 AuthenTech – AI-Powered Document Verification & Authentication Platform
+# 🔐 DocuShield – AI-Powered Document Verification & Authentication Platform
 
 <img width="1899" height="864" alt="image" src="https://github.com/user-attachments/assets/2748fd75-13e2-441c-94c5-a7d6d18f8a92" />
   
 
  **Tagline:** *“Trust Made Digital”*  
 
-AuthenTech is an **AI-powered platform** that enables **real-time document verification and authentication**.  
-By combining **computer vision (YOLOv8n)** with **OCR (Gemini API)**, AuthenTech detects forgeries, extracts structured data,  
+DocuShield is an **AI-powered platform** that enables **real-time document verification and authentication**.  
+By combining **computer vision (YOLOv8n)** with **OCR (Gemini API)**, DocuShield detects forgeries, extracts structured data,  
 and ensures that every certificate, credential, or official paper can be instantly and reliably validated.  
 
-Built during **HackOdisha 2025**, AuthenTech solves the problem of **fake documents, slow manual verification, and lack of scalable solutions**.  
+Built during **HackOdisha 2025**, DocuShield solves the problem of **fake documents, slow manual verification, and lack of scalable solutions**.  
 
 ---
 
@@ -21,8 +21,8 @@ Built during **HackOdisha 2025**, AuthenTech solves the problem of **fake docume
 
 ---
 
-## ✅ Our Solution: AuthenTech  
-AuthenTech provides a **robust, AI-driven platform** for instant and reliable verification.  
+## ✅ Our Solution: DocuShield  
+DocuShield provides a **robust, AI-driven platform** for instant and reliable verification.  
 
 ✔ Upload any certificate/document.  
 ✔ Detect forged/tampered regions using **YOLOv8n**.  
@@ -89,7 +89,7 @@ There are **3 possible outcomes**:
 
 ## 🌐 Website Snapshots  
 
-Here are some snapshots of the **AuthenTech web platform**:  
+Here are some snapshots of the **DocuShield web platform**:  
 
 ![WhatsApp Image 2025-09-08 at 00 22 12_fdbd73f7](https://github.com/user-attachments/assets/996b3e46-676f-4140-926f-7f23f56e46e4)
 

@@ -35,7 +35,7 @@ export default function Privacy() {
               </CardHeader>
               <CardContent className="prose prose-slate max-w-none">
                 <p>
-                  The AuthenTech platform by Team Firewall Breakers collects
+                  The DocuShield platform by Team Firewall Breakers collects
                   only the necessary information required to verify academic
                   credentials and maintain system security.
                 </p>
@@ -149,7 +149,7 @@ export default function Privacy() {
                   </li>
                 </ul>
                 <p>
-                  To exercise these rights, contact us at privacy@authentech.com
+                  To exercise these rights, contact us at privacy@DocuShield.com
                 </p>
               </CardContent>
             </Card>
@@ -163,7 +163,7 @@ export default function Privacy() {
                 </p>
                 <div className="mt-4 space-y-2 text-sm">
                   <p>
-                    <strong>Email:</strong> privacy@authentech.com
+                    <strong>Email:</strong> privacy@DocuShield.com
                   </p>
                   <p>
                     <strong>Phone:</strong> +91-651-XXX-XXXX

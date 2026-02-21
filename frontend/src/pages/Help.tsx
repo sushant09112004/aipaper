@@ -220,7 +220,7 @@ export default function Help() {
                     <div>
                       <p className="font-medium">Email Support</p>
                       <p className="text-sm text-muted-foreground">
-                        support@authentech.com
+                        support@DocuShield.com
                       </p>
                       <Badge variant="outline" className="mt-1 text-xs">
                         Response within 4 hours
